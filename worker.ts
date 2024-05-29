@@ -27,6 +27,13 @@ export default {
       return cachedResponse;
     }
 
+    const PATH_PREFIX = '/workers-template/';
+
+    // strip path prefix
+    if (url.pathname.startsWith(PATH_PREFIX)) {
+      url.pathname = url.pathname.slice(PATH_PREFIX.length - 1);
+    }
+
     return new Response(`Hi, you're visiting "${url.pathname}" under "${url.origin}".`);
   },
 };
