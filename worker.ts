@@ -34,6 +34,19 @@ export default {
       url.pathname = url.pathname.slice(PATH_PREFIX.length - 1);
     }
 
+    const cacheKey = new Request(url, request);
+    const cachedResponse = await caches.default.match(cacheKey);
+    if (cachedResponse) { return cachedResponse; }
+
+    if (url.pathname == '/something-cached') {
+      return putCache(cacheKey, new Response('This content should be cached.', {
+        headers: {
+          'Cache-Control': 's-maxage=86400',
+          'Content-Type': 'text/plain; charset=utf-8',
+        }
+      }));
+    }
+
     return new Response(`Hi, you're visiting "${url.pathname}" under "${url.origin}".`);
   },
 };
